@@ -11,7 +11,6 @@ Project ini adalah aplikasi web sederhana yang dirancang untuk membantu Network 
 - [Fitur Utama](#-fitur-utama)
 - [Metode & Logika](#-metode--logika)
 - [Cakupan Diagnosa](#-cakupan-diagnosa)
-- [Teknologi yang Digunakan](#-teknologi-yang-digunakan)
 - [Tim Pengembang](#-tim-pengembang)
 
 ## 📝 Latar Belakang
@@ -42,13 +41,6 @@ Sistem dapat mendeteksi kode masalah berikut (berdasarkan `diagnosa.html`):
 | **PG05** | STP Loop Protection | Port diblokir oleh Spanning Tree Protocol. |
 | **PG06** | Trunking Mode Issue | Masalah pada mode access/trunk. |
 | **PHY** | Physical Layer | Indikasi kabel putus atau kerusakan hardware. |
-
-## 💻 Teknologi yang Digunakan
-Project ini dibangun menggunakan teknologi web standar tanpa *backend* server (Static Site), sehingga sangat ringan dan mudah dijalankan.
-* **HTML5** - Struktur semantik.
-* **CSS3** - Styling modern (Variables, Flexbox, Grid) & Responsiveness.
-* **JavaScript (Vanilla)** - Logika diagnosa dan manipulasi DOM.
-* **FontAwesome** - Ikon antarmuka.
 
 ## 👥 Tim Pengembang atau Kelompok
 Project ini dikembangkan oleh kelompok studi kasus:
