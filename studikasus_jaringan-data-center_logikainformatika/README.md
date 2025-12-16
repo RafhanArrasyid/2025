@@ -12,7 +12,6 @@ Project ini adalah aplikasi web sederhana yang dirancang untuk membantu Network 
 - [Metode & Logika](#-metode--logika)
 - [Cakupan Diagnosa](#-cakupan-diagnosa)
 - [Teknologi yang Digunakan](#-teknologi-yang-digunakan)
-- [Cara Menjalankan](#-cara-menjalankan)
 - [Tim Pengembang](#-tim-pengembang)
 
 ## 📝 Latar Belakang
@@ -50,16 +49,6 @@ Project ini dibangun menggunakan teknologi web standar tanpa *backend* server (S
 * **CSS3** - Styling modern (Variables, Flexbox, Grid) & Responsiveness.
 * **JavaScript (Vanilla)** - Logika diagnosa dan manipulasi DOM.
 * **FontAwesome** - Ikon antarmuka.
-
-## 🚀 Cara Menjalankan
-Karena ini adalah *static web*, Anda tidak perlu menginstall server atau dependency khusus.
-
-1.  **Clone** repositori ini:
-    ```bash
-    git clone [https://github.com/username-anda/sistem-pakar-network.git](https://github.com/username-anda/sistem-pakar-network.git)
-    ```
-2.  Buka folder project.
-3.  Klik dua kali file **`index.html`** untuk membuka di browser (Chrome, Firefox, Edge).
 
 ## 👥 Tim Pengembang atau Kelompok
 Project ini dikembangkan oleh kelompok studi kasus:
