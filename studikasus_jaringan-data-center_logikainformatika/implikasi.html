@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Implikasi - Sistem Pakar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <span class="logo-box"><i class="fas fa-network-wired"></i></span>
+            <h2>Sistem Pakar<br><span>Network Troubleshooting</span></h2>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="diagnosa.html">Diagnosa</a>
+            <a href="diagram-tree.html">Diagram Tree</a>
+            <a href="implikasi.html" class="active">Implikasi</a>
+            <a href="team.html">About</a>
+        </nav>
+      
+    </header>
+
+    <section class="page-header">
+        <h1>Aturan Keputusan (Rules)</h1>
+        <p>Logika IF-THEN yang menjadi dasar pengetahuan sistem pakar ini.</p>
+    </section>
+
+    <div class="container">
+        <div class="rules-grid">
+            
+            <div class="rule-card">
+                <div class="rule-header">Rule 1: Deteksi Keamanan Port (Port Security)</div>
+                <ul style="padding-left: 20px; margin-top: 10px; list-style-type: disc;">
+                    <li>IF Port Status Err-Disabled (GG02)</li>
+                    <li>AND Mac Address Table Kosong (GG08)</li>
+                    <li style="color: #166534; font-weight: bold; margin-top: 5px;">THEN Port Security Violation (PG01)</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <div class="rule-header">Rule 2: Deteksi Konflik Native VLAN</div>
+                <ul style="padding-left: 20px; margin-top: 10px; list-style-type: disc;">
+                    <li>IF Interface Status UP/UP (GG01)</li>
+                    <li>AND Ping Status RTO (GG04)</li>
+                    <li>AND Log Error Native VLAN Mismatch (GG05)</li>
+                    <li style="color: #166534; font-weight: bold; margin-top: 5px;">THEN Native VLAN Mismatch (PG02)</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <div class="rule-header">Rule 3: Deteksi VLAN Belum Dibuat</div>
+                <ul style="padding-left: 20px; margin-top: 10px; list-style-type: disc;">
+                    <li>IF Interface Status UP/UP (GG01)</li>
+                    <li>AND Ping Status RTO (GG04)</li>
+                    <li>AND VLAN Database ID Tidak Ditemukan (GG07)</li>
+                    <li style="color: #166534; font-weight: bold; margin-top: 5px;">THEN Missing VLAN on Database (PG03)</li>
+                </ul>
+            </div>
+
+            <div class="rule-card">
+                <div class="rule-header">Rule 4: Deteksi Loop / STP Blocking</div>
+                <ul style="padding-left: 20px; margin-top: 10px; list-style-type: disc;">
+                    <li>IF Interface Status UP/UP (GG01)</li>
+                    <li>AND Status STP Port BLK (GG06)</li>
+                    <li style="color: #166534; font-weight: bold; margin-top: 5px;">THEN Spanning Tree Loop Protection (PG05)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 40px; border-left: 5px solid var(--accent);">
+            <h2 style="color: var(--primary-dark); margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+                KNOWLEDGEBASE / BASIS PENGETAHUAN
+            </h2>
+
+            <div style="margin-bottom: 25px;">
+                <p style="font-size: 1.1em; margin-bottom: 10px;"><strong>1. Logika Interface & Ping</strong></p>
+                <ul style="list-style: none; padding-left: 0; line-height: 1.8;">
+                    <li><strong>JIKA</strong> Interface Status menunjukkan UP/UP (Connected)</li>
+                    <li><strong>MAKA</strong> Tanya: Apakah status Ping ke gateway RTO (Request Timed Out)?</li>
+                    <li style="color: #166534;"><strong>JIKA YA MAKA</strong> Lanjut pemeriksaan ke Database VLAN (Indikasi masalah Logic).</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <p style="font-size: 1.1em; margin-bottom: 10px;"><strong>2. Logika Missing VLAN</strong></p>
+                <ul style="list-style: none; padding-left: 0; line-height: 1.8;">
+                    <li><strong>JIKA</strong> Status Ping RTO (Request Timed Out)</li>
+                    <li><strong>MAKA</strong> Tanya: Apakah VLAN ID port tersebut ada di Database VLAN?</li>
+                    <li style="color: #166534;"><strong>JIKA TIDAK MAKA</strong> Diagnosa: <strong>Missing VLAN on Database (PG03)</strong>.</li>
+                    <li style="font-style: italic; color: #64748b; margin-top: 5px;">(Solusi: Buat VLAN ID pada database switch)</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <p style="font-size: 1.1em; margin-bottom: 10px;"><strong>3. Logika Native VLAN Mismatch</strong></p>
+                <ul style="list-style: none; padding-left: 0; line-height: 1.8;">
+                    <li><strong>JIKA</strong> VLAN ID sudah ada di Database namun Ping tetap RTO</li>
+                    <li><strong>MAKA</strong> Tanya: Apakah muncul Log Error "Native VLAN Mismatch"?</li>
+                    <li style="color: #166534;"><strong>JIKA YA MAKA</strong> Diagnosa: <strong>Native VLAN Mismatch (PG02)</strong>.</li>
+                    <li style="font-style: italic; color: #64748b; margin-top: 5px;">(Solusi: Samakan konfigurasi native vlan di kedua sisi trunk)</li>
+                </ul>
+            </div>
+
+            <div>
+                <p style="font-size: 1.1em; margin-bottom: 10px;"><strong>4. Logika Port Security / Err-Disabled</strong></p>
+                <ul style="list-style: none; padding-left: 0; line-height: 1.8;">
+                    <li><strong>JIKA</strong> Interface Status menunjukkan 'Err-Disabled'</li>
+                    <li><strong>MAKA</strong> Tanya: Apakah Mac Address Table kosong?</li>
+                    <li style="color: #166534;"><strong>JIKA YA MAKA</strong> Diagnosa: <strong>Port Security Violation (PG01)</strong>.</li>
+                    <li style="font-style: italic; color: #64748b; margin-top: 5px;">(Solusi: Reset interface atau cek sticky MAC address asing)</li>
+                </ul>
+            </div>
+
+        </div>
+        
+    </div>
+</body>
+</html>

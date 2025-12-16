@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnosa - Sistem Pakar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <span class="logo-box"><i class="fas fa-network-wired"></i></span>
+            <h2>Sistem Pakar<br><span>Network Troubleshooting</span></h2>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="diagnosa.html" class="active">Diagnosa</a>
+            <a href="diagram-tree.html">Diagram Tree</a>
+            <a href="implikasi.html">Implikasi</a>
+            <a href="team.html">About</a>
+        </nav>
+        
+    </header>
+
+    <section class="page-header">
+        <h1>Diagnosa Masalah</h1>
+        <p>Jawab pertanyaan di bawah sesuai dengan kondisi perangkat Switch Anda.</p>
+    </section>
+
+    <div class="container">
+        <div class="card" style="max-width: 800px; margin: 0 auto;">
+            <div id="question-box"></div>
+            <div id="result-box" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+      const questions = {
+        q1: {
+          id: "q1",
+          text: "Bagaimana Status Interface pada Switch?",
+          subtext: "Cek perintah 'show ip interface brief'",
+          options: [
+            { label: "UP / UP (Connected)", next: "q_stp" },
+            { label: "Err-Disabled", next: "q_mac" },
+            { label: "UP / DOWN (Not Connect)", next: "result_physical" },
+          ],
+        },
+        q_mac: {
+          id: "q_mac",
+          text: "Cek Tabel Mac Address port tersebut",
+          subtext: "Gunakan 'show mac address-table interface [id]'",
+          options: [
+            { label: "Tabel Kosong (Empty)", next: "result_pg01" },
+            { label: "Ada Mac Address", next: "result_unknown_err" },
+          ],
+        },
+        q_stp: {
+          id: "q_stp",
+          text: "Bagaimana Status STP?",
+          subtext: "Apakah port berwarna Amber atau status BLK?",
+          options: [
+            { label: "Status Forwarding (FWD)", next: "q_ping" },
+            { label: "Status Blocking (BLK)", next: "result_pg05" },
+          ],
+        },
+        q_ping: {
+          id: "q_ping",
+          text: "Lakukan Ping ke Gateway",
+          subtext: "Apakah koneksi berhasil?",
+          options: [
+            { label: "Reply (Berhasil)", next: "result_ok" },
+            { label: "Request Timed Out (RTO)", next: "q_log" },
+          ],
+        },
+        q_log: {
+          id: "q_log",
+          text: "Cek Log Console Switch",
+          subtext: "Ada pesan 'Native VLAN Mismatch'?",
+          options: [
+            { label: "Ya, ada error mismatch", next: "result_pg02" },
+            { label: "Tidak ada error log", next: "q_vlan_db" },
+          ],
+        },
+        q_vlan_db: {
+          id: "q_vlan_db",
+          text: "Cek Database VLAN",
+          subtext: "Apakah VLAN ID ada di database?",
+          options: [
+            { label: "VLAN ID Tidak Ditemukan", next: "result_pg03" },
+            { label: "VLAN ID Ada", next: "q_vtp" },
+          ],
+        },
+        q_vtp: {
+          id: "q_vtp",
+          text: "Cek Status VTP Domain",
+          subtext: "Apakah nama VTP Domain sama dengan Server?",
+          options: [
+            { label: "Berbeda (Mismatch)", next: "result_pg04" },
+            { label: "Sama (Match)", next: "result_pg06" }, 
+          ],
+        },
+      };
+
+      const results = {
+        result_pg01: {
+          code: "PG01",
+          title: "Port Security Violation",
+          desc: "Port dimatikan oleh keamanan switch (Violation).",
+          solution: "Switch(config)# interface gi0/1\nSwitch(config-if)# shutdown\nSwitch(config-if)# no shutdown",
+        },
+        result_pg02: {
+          code: "PG02",
+          title: "Native VLAN Mismatch",
+          desc: "Konfigurasi Native VLAN berbeda di kedua sisi trunk.",
+          solution: "Switch(config-if)# switchport trunk native vlan [ID_YANG_SAMA]",
+        },
+        result_pg03: {
+          code: "PG03",
+          title: "Missing VLAN on Database",
+          desc: "VLAN ID belum dibuat di database global switch.",
+          solution: "Switch(config)# vlan [ID]\nSwitch(config-vlan)# name [NAMA]",
+        },
+        result_pg04: {
+          code: "PG04",
+          title: "VTP Domain Mismatch",
+          desc: "Nama domain VTP berbeda, VLAN tidak sinkron.",
+          solution: "Switch(config)# vtp domain [NAMA_BENAR]",
+        },
+        result_pg05: {
+          code: "PG05",
+          title: "STP Loop Protection",
+          desc: "Port diblokir STP untuk mencegah loop.",
+          solution: "Switch(config-if)# spanning-tree bpdufilter enable",
+        },
+        result_pg06: {
+          code: "PG06",
+          title: "Trunking Mode Issue",
+          desc: "Mode interface access/trunk tidak sesuai.",
+          solution: "Switch(config-if)# switchport mode trunk",
+        },
+        result_physical: {
+          code: "PHY",
+          title: "Masalah Fisik / Layer 1",
+          desc: "Kabel putus atau speed mismatch.",
+          solution: "Ganti kabel LAN atau cek speed/duplex.",
+        },
+        result_unknown_err: {
+          code: "UNK",
+          title: "Unknown Err-Disable",
+          desc: "Cek penyebab lain dengan 'show interface status err-disabled'.",
+          solution: "Switch# show interface status err-disabled",
+        },
+        result_ok: {
+          code: "OK",
+          title: "Jaringan Normal",
+          desc: "Tidak ditemukan masalah konektivitas dasar.",
+          solution: "No Action Needed.",
+        },
+      };
+
+      function renderQuestion(questionId) {
+        const container = document.getElementById("question-box");
+        const resultContainer = document.getElementById("result-box");
+        container.style.display = "block";
+        resultContainer.style.display = "none";
+
+        const q = questions[questionId];
+        let html = `
+            <h2 style="color:var(--primary-dark); margin-bottom:10px;">${q.text}</h2>
+            <p style="color:var(--text-muted); margin-bottom:20px;">${q.subtext}</p>
+            <div class="options-grid">
+        `;
+        q.options.forEach((opt) => {
+          html += `
+            <button class="btn-option" onclick="handleAnswer('${opt.next}')">
+                <i class="fas fa-chevron-right" style="color:var(--accent)"></i> ${opt.label}
+            </button>`;
+        });
+        html += `</div>`;
+        container.innerHTML = html;
+      }
+
+      function handleAnswer(nextId) {
+        if (nextId.startsWith("result_")) showResult(nextId);
+        else renderQuestion(nextId);
+      }
+
+      function showResult(resultId) {
+        const container = document.getElementById("question-box");
+        const resultContainer = document.getElementById("result-box");
+        const res = results[resultId];
+
+        container.style.display = "none";
+        resultContainer.style.display = "block";
+
+        resultContainer.innerHTML = `
+            <div class="result-box">
+                <h2 style="color:#166534; margin-bottom:10px;"><i class="fas fa-check-circle"></i> Diagnosa: ${res.title}</h2>
+                <p><strong>Kode Masalah:</strong> ${res.code}</p>
+                <p>${res.desc}</p>
+                <div class="solution-code">${res.solution}</div>
+            </div>
+            <br>
+            <button class="btn-primary" onclick="renderQuestion('q1')">Diagnosa Ulang</button>
+        `;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => renderQuestion("q1"));
+    </script>
+</body>
+</html>
