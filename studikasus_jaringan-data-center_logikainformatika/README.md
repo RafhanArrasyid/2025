@@ -1,6 +1,6 @@
 # Sistem Pakar Network Troubleshooting - Data Center 🌐🛠️
 
-![Project Banner](webportal-sistem-datacenter/assets/content.jpg)
+![Project Banner](studikasus_jaringan-data-center_logikainformatika/assets/content.jpg)
 
 > **Sistem Pakar Deteksi Kesalahan Konfigurasi Jaringan (VLAN & Switching) Menggunakan Metode Forward Chaining.**
 
